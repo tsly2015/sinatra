@@ -90,6 +90,8 @@ end
 
 get '/products' do
   # PRODUCTS PAGE LISTING ALL THE PRODUCTS
+  DATA = HTTParty.get('https://fomotograph-api.udacity.com/products.json')['photo']
+  LOCATIONS = ['canada', 'england', 'france', 'ireland', 'mexico', 'scotland', 'taiwan', 'us']
   erb "<!DOCTYPE html>
   <html>
   <head>
@@ -108,14 +110,9 @@ get '/products' do
         <a href='/products' class='nav'>Products</a>
       </div>
 
-      <% DATA = HTTParty.get('https://fomotograph-api.udacity.com/products.json')['photo'] %>
-
       <div id='main'>
         <h1> All Products </h1>
         <div id='wrapper'>
-
-          <% LOCATIONS = ['canada', 'england', 'france', 'ireland', 'mexico', 'scotland', 'taiwan', 'us'] %>
-
           <% LOCATIONS.each do |location| %>
           <a href='/products/location/<%= location %>'>
           <div class='product'>
@@ -144,6 +141,7 @@ end
 
 get '/products/location/:location' do
   # PAGE DISPLAYING ALL PHOTOS FROM ONE LOCATION
+  DATA = HTTParty.get('https://fomotograph-api.udacity.com/products.json')['photo']  
   erb "<!DOCTYPE html>
   <html>
   <head>
@@ -163,9 +161,6 @@ get '/products/location/:location' do
       </div>
 
       <div id='main'>
-
-        <% DATA = HTTParty.get('https://fomotograph-api.udacity.com/products.json')['photo'] %>
-
         <h1> <%= params[:location] != 'us' ? params[:location].capitalize : params[:location].upcase %> </h1>
         <div id='wrapper'>
 
@@ -200,10 +195,10 @@ end
 
 get '/products/:id' do
   # PAGE DISPLAYING ONE PRODUCT WITH A GIVEN ID
+  DATA = HTTParty.get('https://fomotograph-api.udacity.com/products.json')['photo']  
   erb "<!DOCTYPE html>
   <html>
   <head>
-    <% DATA = HTTParty.get('https://fomotograph-api.udacity.com/products.json')['photo'] %>
     <% product = DATA.select { |prod| prod['id'] == params[:id].to_i }.first %>
     <title>Fomotograph | <%= product['title'] %> </title>
     <link rel='stylesheet' type='text/css' href='<%= url('/style.css') %>'>
